@@ -16,4 +16,6 @@ public interface CitaRepository extends JpaRepository<Cita, Long> {
     List<Cita> findByEstado(EstadoCita estado);
 
     List<Cita> findByFechaOrderByHoraAsc(LocalDate fecha);
+
+    boolean existsByServicio_Id(Long servicioId);
 }
