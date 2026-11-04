@@ -1,5 +1,6 @@
 package cl.nutrivida.backend.config;
 
+import jakarta.servlet.DispatcherType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -20,6 +21,11 @@ public class SecurityConfig {
                     "/api/v1/servicios/**"
             ))
             .authorizeHttpRequests(auth -> auth
+
+                .dispatcherTypeMatchers(
+                    DispatcherType.ERROR
+                ).permitAll()
+
                 .requestMatchers(
                         HttpMethod.GET,
                         "/api/v1/servicios",
