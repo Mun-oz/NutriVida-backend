@@ -37,7 +37,11 @@ services:
       DB_URL: jdbc:mysql://mysql:3306/nutrivida_db
       DB_USERNAME: nutrivida
       DB_PASSWORD: ${MYSQL_PASSWORD:?Falta MYSQL_PASSWORD}
-      SPRING_SECURITY_USER_ROLES: ADMIN
+      JWT_SECRET: ${JWT_SECRET:?Falta JWT_SECRET}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:?Falta JWT_REFRESH_SECRET}
+      JWT_EXPIRATION_MS: 3600000
+      JWT_REFRESH_EXPIRATION_MS: 604800000
+      CORS_ALLOWED_ORIGINS: http://localhost:5173
 
     depends_on:
       mysql:
