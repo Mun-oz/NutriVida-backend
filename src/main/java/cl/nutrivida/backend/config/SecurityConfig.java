@@ -76,6 +76,11 @@ public class SecurityConfig {
                     "/api/v1/servicios/**"
                 ).hasRole("ADMIN")
 
+                .requestMatchers(
+                    HttpMethod.POST,
+                    "/api/v1/citas"
+                ).permitAll()
+
                 .anyRequest().authenticated()
             )
 
