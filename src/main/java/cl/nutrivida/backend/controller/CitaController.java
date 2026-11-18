@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 @RestController
 @RequestMapping("/api/v1/citas")
 public class CitaController {
@@ -26,11 +28,13 @@ public class CitaController {
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public List<CitaResponse> listar() {
         return citaService.listar();
     }
 
     @GetMapping("/mis-citas")
+    @SecurityRequirement(name = "bearerAuth")
     public List<CitaResponse> misCitas(
             @AuthenticationPrincipal UserDetails usuario) {
 
@@ -39,6 +43,7 @@ public class CitaController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public CitaResponse obtener(@PathVariable Long id) {
         return citaService.obtener(id);
     }
@@ -57,6 +62,7 @@ public class CitaController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public CitaResponse actualizar(
             @PathVariable Long id,
             @Valid @RequestBody CitaRequest request) {
@@ -66,6 +72,7 @@ public class CitaController {
 
     @PatchMapping("/{id}/estado")
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public CitaResponse cambiarEstado(
             @PathVariable Long id,
             @Valid @RequestBody EstadoCitaRequest request) {
@@ -75,6 +82,7 @@ public class CitaController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
 
         citaService.eliminar(id);
