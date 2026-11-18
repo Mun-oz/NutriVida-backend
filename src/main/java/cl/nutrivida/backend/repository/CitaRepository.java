@@ -35,4 +35,6 @@ public interface CitaRepository extends JpaRepository<Cita, Long> {
         EstadoCita estado,
         Long id
     );
+
+    boolean existsByUsuario_Id(Long usuarioId);
 }
