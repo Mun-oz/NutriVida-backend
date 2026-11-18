@@ -76,6 +76,11 @@ public class SecurityConfig {
                     "/api/v1/servicios/**"
                 ).hasRole("ADMIN")
 
+                .requestMatchers(
+                    HttpMethod.POST,
+                    "/api/v1/citas"
+                ).permitAll()
+
                 .anyRequest().authenticated()
             )
 
@@ -121,7 +126,7 @@ public class SecurityConfig {
         config.setAllowedOrigins(allowedOrigins);
 
         config.setAllowedMethods(List.of(
-                "GET", "POST", "PUT", "DELETE", "OPTIONS"
+                "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"
         ));
 
         config.setAllowedHeaders(List.of(
