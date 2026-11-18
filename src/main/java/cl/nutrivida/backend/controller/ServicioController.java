@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 @RestController
 @RequestMapping("/api/v1/servicios")
 public class ServicioController {
@@ -34,6 +36,7 @@ public class ServicioController {
     }
 
     @PostMapping
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<Servicio> crear(
             @Valid @RequestBody ServicioRequest request) {
 
@@ -46,6 +49,7 @@ public class ServicioController {
     }
 
     @PutMapping("/{id}")
+    @SecurityRequirement(name = "bearerAuth")
     public Servicio actualizar(
             @PathVariable Long id,
             @Valid @RequestBody ServicioRequest request) {
@@ -54,6 +58,7 @@ public class ServicioController {
     }
 
     @DeleteMapping("/{id}")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
 
         servicioService.eliminar(id);
