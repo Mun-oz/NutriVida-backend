@@ -5,7 +5,7 @@ import cl.nutrivida.backend.model.Rol;
 import cl.nutrivida.backend.model.Usuario;
 import cl.nutrivida.backend.repository.UsuarioRepository;
 import cl.nutrivida.backend.security.JwtService;
-
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 
 import org.springframework.http.HttpStatus;
@@ -135,6 +135,7 @@ public class AuthController {
     }
 
     @GetMapping("/me")
+    @SecurityRequirement(name = "bearerAuth")
     public Map<String, Object> me(
             @AuthenticationPrincipal UserDetails user) {
 
