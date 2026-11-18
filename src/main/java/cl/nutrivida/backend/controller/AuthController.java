@@ -6,7 +6,6 @@ import cl.nutrivida.backend.model.Usuario;
 import cl.nutrivida.backend.repository.UsuarioRepository;
 import cl.nutrivida.backend.security.JwtService;
 
-import io.jsonwebtoken.JwtException;
 import jakarta.validation.Valid;
 
 import org.springframework.http.HttpStatus;
