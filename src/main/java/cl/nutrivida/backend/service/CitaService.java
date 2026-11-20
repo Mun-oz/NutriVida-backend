@@ -3,6 +3,7 @@ package cl.nutrivida.backend.service;
 import cl.nutrivida.backend.dto.*;
 import cl.nutrivida.backend.model.*;
 import cl.nutrivida.backend.repository.*;
+import cl.nutrivida.backend.validation.RunUtils;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -92,7 +93,9 @@ public class CitaService {
 
                 cita.setUsuario(usuario);
                 cita.setNombrePaciente(usuario.getNombre());
-                cita.setRunPaciente(usuario.getRun());
+                cita.setRunPaciente(
+                RunUtils.normalizar(usuario.getRun())
+                );
                 cita.setEmailPaciente(usuario.getEmail());
             }
         }
@@ -195,7 +198,7 @@ public class CitaService {
         cita.setNombrePaciente(request.nombrePaciente().trim());
 
         cita.setRunPaciente(
-                request.runPaciente().trim().toUpperCase(Locale.ROOT)
+                RunUtils.normalizar(request.runPaciente())
         );
 
         cita.setEmailPaciente(
