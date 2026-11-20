@@ -1,6 +1,7 @@
 package cl.nutrivida.backend.dto;
 
 import cl.nutrivida.backend.model.ModalidadCita;
+import cl.nutrivida.backend.validation.RunValido;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
@@ -15,8 +16,8 @@ public record CitaRequest(
     @Size(max = 150)
     String nombrePaciente,
 
-    @NotBlank
     @Size(max = 15)
+    @RunValido
     String runPaciente,
 
     @NotBlank
@@ -34,3 +35,4 @@ public record CitaRequest(
     ModalidadCita modalidad
 
 ) {}
+

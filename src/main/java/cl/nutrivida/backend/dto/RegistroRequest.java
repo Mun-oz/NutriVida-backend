@@ -1,11 +1,12 @@
 package cl.nutrivida.backend.dto;
 
+import cl.nutrivida.backend.validation.RunValido;
 import jakarta.validation.constraints.*;
 
 public record RegistroRequest(
 
-    @NotBlank
-    @Pattern(regexp = "^[0-9]{7,8}[0-9kK]$")
+    @RunValido
+    @Size(max = 15)
     String run,
 
     @NotBlank
@@ -30,3 +31,4 @@ public record RegistroRequest(
     String direccion
 
 ) {}
+
