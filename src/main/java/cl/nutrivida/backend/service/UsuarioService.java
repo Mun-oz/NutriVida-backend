@@ -4,6 +4,7 @@ package cl.nutrivida.backend.service;
 import cl.nutrivida.backend.dto.*;
 import cl.nutrivida.backend.model.*;
 import cl.nutrivida.backend.repository.*;
+import cl.nutrivida.backend.validation.RunUtils;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -170,10 +171,7 @@ public class UsuarioService {
     }
 
     private String normalizarRun(String run) {
-        if (run == null || run.isBlank()) {
-            return null;
-        }
-        return run.trim().toUpperCase(Locale.ROOT);
+        return RunUtils.normalizar(run);
     }
 
     private UsuarioResponse convertir(Usuario usuario) {
