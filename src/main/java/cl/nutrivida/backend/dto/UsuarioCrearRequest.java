@@ -1,6 +1,7 @@
 package cl.nutrivida.backend.dto;
 
 import cl.nutrivida.backend.model.Rol;
+import cl.nutrivida.backend.validation.RunValido;
 import jakarta.validation.constraints.*;
 
 public record UsuarioCrearRequest(
@@ -21,6 +22,7 @@ public record UsuarioCrearRequest(
     Rol rol,
 
     @Size(max = 15)
+    @RunValido(required = false)
     String run,
 
     @Size(max = 100)
