@@ -5,6 +5,8 @@ import cl.nutrivida.backend.model.Rol;
 import cl.nutrivida.backend.model.Usuario;
 import cl.nutrivida.backend.repository.UsuarioRepository;
 import cl.nutrivida.backend.security.JwtService;
+import cl.nutrivida.backend.validation.RunUtils;
+
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 
@@ -56,8 +58,7 @@ public class AuthController {
         String email = request.email().trim()
                 .toLowerCase(Locale.ROOT);
 
-        String run = request.run().trim()
-                .toUpperCase(Locale.ROOT);
+        String run = RunUtils.normalizar(request.run());
 
         if (usuarioRepository.existsByEmail(email)) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
