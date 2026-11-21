@@ -10,6 +10,7 @@ import java.time.LocalTime;
 public record CitaRequest(
 
     @NotNull
+    @Positive
     Long servicioId,
 
     @NotBlank
@@ -22,6 +23,7 @@ public record CitaRequest(
 
     @NotBlank
     @Email
+    @Size(max = 150)
     String emailPaciente,
 
     @NotNull

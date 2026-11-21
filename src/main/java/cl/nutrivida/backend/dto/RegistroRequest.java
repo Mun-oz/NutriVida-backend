@@ -15,6 +15,7 @@ public record RegistroRequest(
 
     @NotBlank
     @Email
+    @Size(max = 150)
     String email,
 
     @NotBlank
@@ -22,13 +23,15 @@ public record RegistroRequest(
     String password,
 
     @NotBlank
+    @Size(max = 100)
     String region,
 
     @NotBlank
+    @Size(max = 100)
     String comuna,
 
     @NotBlank
+    @Size(max = 200)
     String direccion
 
 ) {}
-
