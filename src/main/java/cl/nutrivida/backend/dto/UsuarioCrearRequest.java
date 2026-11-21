@@ -12,6 +12,7 @@ public record UsuarioCrearRequest(
 
     @NotBlank
     @Email
+    @Size(max = 150)
     String email,
 
     @NotBlank

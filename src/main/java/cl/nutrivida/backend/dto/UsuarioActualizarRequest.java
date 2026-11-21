@@ -30,7 +30,7 @@ public record UsuarioActualizarRequest(
     @Size(max = 100)
     String comuna,
 
-    @Size(max = 100)
+    @Size(max = 200)
     String direccion
 
 ) {}
