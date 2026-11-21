@@ -16,6 +16,10 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Locale;
 
+import java.time.DayOfWeek;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+
 @Service
 public class CitaService {
 
@@ -64,6 +68,7 @@ public class CitaService {
     public CitaResponse crear(
             CitaRequest request,
             UserDetails principal) {
+                 validarFechaHora(request);
 
         Servicio servicio = buscarServicio(request.servicioId());
 
@@ -110,6 +115,9 @@ public class CitaService {
             Long id,
             CitaRequest request) {
 
+            validarFechaHora(request);
+            
+
         Cita cita = buscar(id);
         Servicio servicio = buscarServicio(request.servicioId());
 
@@ -155,6 +163,56 @@ public class CitaService {
                         "Servicio no encontrado"
                 ));
     }
+
+
+    void validarFechaHora(CitaRequest request) {
+
+        LocalDate fecha = request.fecha();
+        LocalTime hora = request.hora();
+
+        if (fecha == null || hora == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "La fecha y hora son obligatorias"
+            );
+        }
+
+        ZonedDateTime ahora = ZonedDateTime.now(ZONA_CHILE);
+
+        // Rechazar fechas y horas pasadas.
+        if (fecha.isBefore(ahora.toLocalDate()) ||
+                (fecha.isEqual(ahora.toLocalDate()) &&
+                        !hora.isAfter(ahora.toLocalTime()))) {
+
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "No se puede reservar una cita en el pasado"
+            );
+        }
+
+        // Solo permitir lunes a viernes.
+        DayOfWeek dia = fecha.getDayOfWeek();
+
+        if (dia == DayOfWeek.SATURDAY ||
+                dia == DayOfWeek.SUNDAY) {
+
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "No se permiten citas durante fines de semana"
+            );
+        }
+
+        // Validar horario de atención.
+        if (hora.isBefore(HORA_APERTURA) ||
+                !hora.isBefore(HORA_CIERRE)) {
+
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "El horario de atención es de 09:00 a 18:00"
+            );
+        }
+    }
+
 
     private void validarDisponibilidad(
             CitaRequest request,
@@ -230,4 +288,13 @@ public class CitaService {
                 cita.getEstado()
         );
     }
+
+    private static final ZoneId ZONA_CHILE =
+        ZoneId.of("America/Santiago");
+
+    private static final LocalTime HORA_APERTURA =
+            LocalTime.of(9, 0);
+
+    private static final LocalTime HORA_CIERRE =
+            LocalTime.of(18, 0);
 }
