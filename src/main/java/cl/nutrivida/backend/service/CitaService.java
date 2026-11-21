@@ -134,10 +134,35 @@ public class CitaService {
     @Transactional
     public CitaResponse cambiarEstado(
             Long id,
-            EstadoCita estado) {
+            EstadoCita nuevoEstado) {
 
         Cita cita = buscar(id);
-        cita.setEstado(estado);
+        EstadoCita actual = cita.getEstado();
+
+        if (actual == nuevoEstado) {
+            return convertir(cita);
+        }
+
+        boolean permitido = switch (actual) {
+            case PENDIENTE ->
+                    nuevoEstado == EstadoCita.CONFIRMADA ||
+                    nuevoEstado == EstadoCita.CANCELADA;
+
+            case CONFIRMADA ->
+                    nuevoEstado == EstadoCita.COMPLETADA ||
+                    nuevoEstado == EstadoCita.CANCELADA;
+
+            case CANCELADA, COMPLETADA -> false;
+        };
+
+        if (!permitido) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Cambio de estado no permitido"
+            );
+        }
+
+        cita.setEstado(nuevoEstado);
 
         return convertir(citas.save(cita));
     }
