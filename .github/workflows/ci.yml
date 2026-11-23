@@ -1,0 +1,67 @@
+name: CI Backend NutriVida
+
+on:
+  push:
+    branches:
+      - main
+      - feature/deploy-aws
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Compilar, probar y generar JAR
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: ci_root_password
+          MYSQL_DATABASE: nutrivida_db
+          MYSQL_USER: nutrivida
+          MYSQL_PASSWORD: ci_password
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -pci_root_password"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=15
+
+    env:
+      DB_URL: jdbc:mysql://127.0.0.1:3306/nutrivida_db
+      DB_USERNAME: nutrivida
+      DB_PASSWORD: ci_password
+      JWT_SECRET: bnV0cml2aWRhLWNpLWFjY2Vzcy1rZXktMDAwMDAwMDAw
+      JWT_REFRESH_SECRET: bnV0cml2aWRhLWNpLXJlZnJlc2gta2V5LTAwMDAwMDAw
+
+    steps:
+      - name: Descargar codigo
+        uses: actions/checkout@v4
+
+      - name: Configurar Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Preparar Maven Wrapper
+        run: chmod +x mvnw
+
+      - name: Compilar y ejecutar pruebas
+        run: ./mvnw -B clean verify
+
+      - name: Guardar archivo JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: nutrivida-backend-jar
+          path: target/*.jar
+          if-no-files-found: error
+          retention-days: 14

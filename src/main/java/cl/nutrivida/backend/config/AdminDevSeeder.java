@@ -14,7 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Locale;
 
 @Configuration
-@Profile("dev")
+@Profile({"dev", "prod"})
 public class AdminDevSeeder {
 
     @Bean
